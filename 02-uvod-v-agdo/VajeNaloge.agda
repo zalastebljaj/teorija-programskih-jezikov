@@ -55,21 +55,23 @@ module List where
         _∷_ : A → List A → List A
 
     l1 : List ℕ
-    l1 = {!   !}
+    l1 = []
 
     l2 : List ℕ
-    l2 = {!   !}
+    l2 = O ∷ []
 
     l3 : List ℕ
-    l3 = {!   !}
+    l3 = S O ∷ S O ∷ []
 
     -- Definirajte nekaj osnovnih operacij na seznamih
     -- V pomoč naj vam bodo testi na koncu funkcij
-    _++_ : {!   !}
-    _++_ = {!   !}
+    _++_ : {A : Set} → List A → List A → List A
+    [] ++ ys = ys
+    x ∷ xs ++ ys = x ∷ (xs ++ ys)
 
-    len : {!   !}
-    len = {!   !}
+    len : {A : Set} → List A → ℕ
+    len [] = O
+    len (x ∷ xs) = S (len xs)
 
     reverse : {!   !}
     reverse = {!   !}
@@ -85,8 +87,8 @@ module List where
     ... | 𝕗 = filter f l
     ... | 𝕥 = x ∷ (filter f l)
 
-    _[_] : {!   !}
-    _[_] = {!   !}
+    _[_] : {A : Set} -> List A -> ℕ -> Maybe A
+    _[_] xs = {! !}
 
 -- Odvisni tipi
 
@@ -110,13 +112,13 @@ module Vector where
     -- Za določene tipe vektorjev lahko vedno dobimo glavo in rep
 
     head : {A : Set} → {n : ℕ} → Vector A (S n) → A
-    head = {!   !}
+    head (x ∷ xs) = x
 
-    tail : {!   !}
-    tail = {!   !}
+    tail : {A : Set} → {n : ℕ} → Vector A (S n) →  Vector A n
+    tail (x ∷ xs) = xs
 
-    map : {!   !}
-    map = {!   !}
+    map : {A B : Set} → {n : ℕ} -> (A -> B) → Vector A (S n) → Vector B (S n)
+    map f (x ∷ xs) = (f x) ∷ {!   !}
 
     -- Sedaj lahko napišemo bolj informativni obliki funkcij `zip` in `unzip`
 
@@ -207,4 +209,4 @@ module Variadic where
             variadicSum' (S a) cur = \x → variadicSum' a (cur + x)
 
     a : ℕ
-    a = variadicSum (S (S (S O))) O (S O) (S O)
+    a = variadicSum (S (S (S O))) O (S O) (S O) 
