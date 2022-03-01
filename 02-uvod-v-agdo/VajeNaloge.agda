@@ -71,7 +71,7 @@ module List where
 
     len : {A : Set} → List A → ℕ
     len [] = O
-    len (x ∷ xs) = S (len xs)
+    len (x ∷ xs) = S(len xs)
 
     reverse : {A : Set} -> List A -> List A
     reverse [] = []
@@ -157,13 +157,13 @@ module Vector where
     
     vecToList : {n : ℕ} {A : Set} → Vector A n → List.List A
     vecToList [] = List.[]
-    vecToList (x ∷ vec) = x List.∷ vecToList vec
+    vecToList (x ∷ vec) = x List.List.∷ vecToList vec
 
     -- V tipih lahko nastopaju tudi povsem običajne funkcije
 
     listToVec : {A : Set} {n : ℕ} → (l : List.List A) → Vector A (List.len l)
     listToVec List.[] = []
-    listToVec (x List.∷ l) = x ∷ listToVec l
+    listToVec (x List.∷ xs) = x ∷ listToVec xs
 
     count : {A : Set} {n : ℕ} → (f : A → 𝔹) → (v : Vector A n) → ℕ
     count f v = List.len (List.filter f (vecToList v))
@@ -181,13 +181,16 @@ module Line where
         _::_ : {n m : ℕ} → Vector.Vector A m → Line A n → Line A (S n)
 
     lineLen : {A : Set} {n : ℕ} → Line A n → ℕ
-    lineLen = {!   !}
+    lineLen [] = O
+    lineLen (x :: l) = List.len (Vector.vecToList x) + lineLen l
 
     flattenL : {A : Set} {n : ℕ} → (lin : Line A n) → Vector.Vector A (lineLen lin) 
-    flattenL = {!   !}
+    flattenL [] = Vector.[]
+    flattenL (x :: l) = {!   !}
     
     map : ∀ { A B : Set } {n : ℕ}  → (A -> B) → Line A n → Line B n
-    map = {!   !}
+    map f [] = []
+    map f (x :: l) = Vector.map f x :: map f l
 
     foldrL : ∀ {A B : Set} {n : ℕ} → (∀ {n : ℕ} → Vector.Vector A n → B → B) → B → (Line A n) → B
     foldrL = {!   !}
@@ -223,4 +226,4 @@ module Variadic where
             variadicSum' (S a) cur = \x → variadicSum' a (cur + x)
 
     a : ℕ
-    a = variadicSum (S (S (S O))) O (S O) (S O) 
+    a = variadicSum (S (S (S O))) O (S O) (S O)   
