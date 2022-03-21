@@ -10,4 +10,40 @@ IN
 LET times =
     FUN m -> FUN n -> FUN f -> FUN x -> m (n f) x
 IN
-times (succ zero) (succ zero)
+LET pred =
+    FUN n -> FUN f -> FUN x -> n (FUN g -> FUN h -> h (g f)) (FUN u -> x) (FUN u -> u)
+IN
+LET one =
+    succ zero
+IN
+LET two =
+    succ one
+IN
+LET four =
+    times two two
+IN
+LET six =
+    plus two four
+IN
+LET true =
+    FUN x -> FUN y -> x
+IN
+LET false =
+    FUN x -> FUN y -> y
+IN
+LET iszero =
+    FUN n -> n (FUN z -> false) true
+IN
+LET ifthenelse =
+    FUN b -> FUN x -> FUN y -> b x y
+IN
+LET psiodfact =
+    FUN f -> FUN n -> ifthenelse (iszero n) (zero) (succ (f (pred n)))
+IN
+LET ycombinator =
+    FUN psi -> (FUN x -> x x) (FUN x -> psi (x x))
+IN
+LET fact =
+    ycombinator (FUN f -> FUN n -> succ (f n))
+IN
+fact zero
