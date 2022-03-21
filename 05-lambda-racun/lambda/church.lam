@@ -2,7 +2,7 @@ LET zero =
     FUN f -> FUN x -> x
 IN
 LET succ =
-    FUN n -> FUN f -> FUN x -> n f (f x)
+    FUN n -> FUN f -> FUN x -> f (n f x)
 IN
 LET plus =
     FUN m -> FUN n -> FUN f -> FUN x -> m f (n f x)
@@ -38,12 +38,12 @@ LET ifthenelse =
     FUN b -> FUN x -> FUN y -> b x y
 IN
 LET psiodfact =
-    FUN f -> FUN n -> ifthenelse (iszero n) (zero) (succ (f (pred n)))
+    FUN f -> FUN n -> ifthenelse (iszero n) (one) (FUN g -> FUN x -> (times n (f (pred n))) g x)
 IN
 LET ycombinator =
-    FUN psi -> (FUN x -> x x) (FUN x -> psi (x x))
+    FUN psi -> (FUN x -> x x) (FUN x -> FUN y -> psi (x x) y)
 IN
-LET fact =
-    ycombinator (FUN f -> FUN n -> succ (f n))
+LET normalize =
+    FUN n -> n succ zero
 IN
-fact zero
+normalize ((ycombinator psiodfact) (succ (succ six)))
