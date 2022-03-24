@@ -4,12 +4,16 @@
 
 ### Sintaksa
 
-Vzemimo λ-račun z logičnimi vrednostmi:
+Vzemimo λ-račun, kot smo ga spoznali na predavanjih:
 
     M ::= x
         | true
         | false
         | if M then M1 else M2
+        | ⟨n⟩
+        | M1 + M2
+        | M1 * M2
+        | M1 < M2
         | λx. M
         | M1 M2
 
@@ -19,6 +23,7 @@ Za vrednosti vzamemo:
 
     V ::= true
         | false
+        | ⟨n⟩
         | λx. M
 
 Operacijsko semantiko podamo z malimi koraki:
@@ -32,6 +37,44 @@ Operacijsko semantiko podamo z malimi koraki:
 
     -------------------------------
     if false then M1 else M2  ↝  M2
+
+    M1  ↝  M1'
+    --------------------
+    M1 + M2  ↝  M1' + M2
+
+    M2  ↝  M2'
+    --------------------
+    V1 + M2  ↝  V1 + M2'
+
+    ---------------------------
+    ⟨n1⟩ + ⟨n2⟩  ↝  ⟨n1 + n2⟩
+
+    M1  ↝  M1'
+    --------------------
+    M1 * M2  ↝  M1' * M2
+
+    M2  ↝  M2'
+    --------------------
+    V1 * M2  ↝  V1 * M2'
+
+    ---------------------------
+    ⟨n1⟩ * ⟨n2⟩  ↝  ⟨n1 · n2⟩
+
+    M1  ↝  M1'
+    --------------------
+    M1 < M2  ↝  M1' < M2
+
+    M2  ↝  M2'
+    --------------------
+    V1 < M2  ↝  V1 < M2'
+
+    n1 < n2
+    --------------------
+    ⟨n1⟩ < ⟨n2⟩  ↝  true
+
+    n1 ≮ n2
+    ---------------------
+    ⟨n1⟩ < ⟨n2⟩  ↝  false
 
     M1  ↝  M1'
     ----------------
@@ -49,6 +92,7 @@ Operacijsko semantiko podamo z malimi koraki:
 Tipi so:
 
     A, B ::= bool
+           | int
            | A → B
 
 Pravila za določanje tipov pa so:
@@ -66,6 +110,21 @@ Pravila za določanje tipov pa so:
     Γ ⊢ M : bool   Γ ⊢ M1 : A   Γ ⊢ M2 : A
     ---------------------------------------
     Γ ⊢ if M then M1 else M2 : A
+
+    -------------
+    Γ ⊢ ⟨n⟩ : int
+
+    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    ----------------------------
+    Γ ⊢ M1 + M2 : int
+
+    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    ----------------------------
+    Γ ⊢ M1 * M2 : int
+
+    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    ----------------------------
+    Γ ⊢ M1 < M2 : bool
 
     Γ, x : A ⊢ M : B
     -----------------
@@ -104,13 +163,28 @@ Z indukcijo na predpostavko o določenem tipu.
 
 * `⊢ if M then M1 else M2 : A`, mora veljati `⊢ M : bool`.
     Po indukciji dobimo dva primera:
-    1. `M` je vrednost, torej `true`, `false` ali `λx. M`.
-    Ker velja `⊢ M : bool`, zadnja možnost odpade.
+    1. `M` je vrednost, torej `true`, `false`, `⟨n⟩` ali `λx. M`.
+    Ker velja `⊢ M : bool`, zadnji dve možnosti odpadeta.
     Če je `M = true`, velja `if M then M1 else M2 ↝ M1`,
     če je `M = false`, velja `if M then M1 else M2 ↝ M2`.
     2. Obstaja `M'`, da velja `M ↝ M'`, zato velja tudi `if M then M1 else M2 ↝ if M' then M1 else M2`.
 
     V vseh primerih izraz torej lahko naredi korak (2).
+
+* `⊢ ⟨n⟩ : int`, imamo vrednost (1).
+
+* `⊢ M1 + M2 : int`, mora veljati `⊢ M1 : int` in `⊢ M2 : int`.
+    Po indukciji za `M1` dobimo dva primera:
+    1. `M1` je vrednost tipa `int`, torej število `⟨n1⟩`. V tem primeru po indukciji za `M2` dobimo dva primera:
+        1. Tudi `M2` je vrednost tipa `int`, torej število `⟨n2⟩`. Tedaj velja `M1 + M2 = ⟨n1⟩ + ⟨n2⟩ ↝ ⟨n1 + n2⟩`.
+        2. Obstaja `M2'`, da velja `M2 ↝ M2'`, zato velja tudi `M1 M2 = V1 M2 ↝ V1 M2'`.
+    2. Obstaja `M1'`, da velja `M1 ↝ M1'`, zato velja tudi `M1 M2 ↝ M1' M2`.
+
+    V vseh primerih izraz torej lahko naredi korak (2).
+
+* `⊢ M1 * M2 : int`, je dokaz podoben kot za vsoto.
+
+* `⊢ M1 < M2 : bool`, je dokaz podoben kot za vsoto.
 
 * `⊢ λx. M : A → B`, imamo vrednost (1).
 
@@ -143,6 +217,22 @@ Z indukcijo na predpostavko o koraku.
 
 * `if false then M1 else M2 ↝ M2`
   iz `Γ ⊢ if M then M1 else M2 : A` sledi `Γ ⊢ M2 : A`, kar želimo.
+
+* `M1 + M2 ↝ M1' + M2`, mora veljati `M1 ↝ M1'`,
+  iz `Γ ⊢ M1 + M2 : int` pa sledi
+  `Γ ⊢ M1 : int` in `Γ ⊢ M2 : int`.
+  Po indukcijski predpostavki velja `Γ ⊢ M1' : int`, iz česar sledi tudi
+  `Γ ⊢ M1' M2 : int`.
+
+* `V1 + M2 ↝ V1 + M2'`, mora veljati `M2 ↝ M2'`,
+  iz `Γ ⊢ V1 + M2 : int` pa sledi
+  `Γ ⊢ V1 : int` in `Γ ⊢ M2 : int`.
+  Po indukcijski predpostavki velja `Γ ⊢ M2' : int`, iz česar sledi tudi
+  `Γ ⊢ M1 + M2' : int`.
+
+* `⟨n1⟩ + ⟨n2⟩ ↝ ⟨n1 + n2⟩`, kjer sta obe strani tipa `int`.
+
+* Dokazi ohranitve za produkt in primerjavo števil so enaki kot pri vsoti.
 
 * `M1 M2 ↝ M1' M2`, mora veljati `M1 ↝ M1'`,
   iz `Γ ⊢ M1 M2 : A` pa sledi
