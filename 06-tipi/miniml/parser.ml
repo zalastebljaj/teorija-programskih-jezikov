@@ -70,18 +70,47 @@ let ident =
   many (alpha || digit || exactly '\'') >>= fun chrs ->
   return (Syntax.Ident (implode (chr :: chrs)))
 
-let rec exp2 chrs =
-  let lambda =
+let rec exp3 chrs =
+  let if_then_else =
+    word "IF" >> spaces1 >> exp3 >>= fun e ->
+    spaces1 >> word "THEN" >> spaces1 >> exp3 >>= fun e1 ->
+    spaces1 >> word "ELSE" >> spaces1 >> exp3 >>= fun e2 ->
+    return (Syntax.IfThenElse (e, e1, e2))
+  and lambda =
     word "FUN" >> spaces1 >> ident >>= fun x ->
-    spaces1 >> word "->" >> spaces1 >> exp2 >>= fun e ->
+    spaces1 >> word "->" >> spaces1 >> exp3 >>= fun e ->
     return (Syntax.Lambda (x, e))
+  and rec_lambda =
+    word "REC" >> spaces1 >> ident >>= fun f ->
+    spaces1 >> ident >>= fun x ->
+    spaces1 >> word "->" >> spaces1 >> exp3 >>= fun e ->
+    return (Syntax.RecLambda (f, x, e))
   and let_in =
     word "LET" >> spaces1 >> ident >>= fun x ->
-    spaces >> word "=" >> spaces >> exp2 >>= fun e1 ->
-    spaces1 >> word "IN" >> spaces1 >> exp2 >>= fun e2 ->
+    spaces >> word "=" >> spaces >> exp3 >>= fun e1 ->
+    spaces1 >> word "IN" >> spaces1 >> exp3 >>= fun e2 ->
     return (Syntax.let_in (x, e1, e2))
+  and let_rec_in =
+    word "LET" >> spaces1 >> word "REC" >> spaces1 >> ident >>= fun f ->
+    spaces >> ident >>= fun x ->
+    spaces >> word "=" >> spaces >> exp3 >>= fun e1 ->
+    spaces1 >> word "IN" >> spaces1 >> exp3 >>= fun e2 ->
+    return (Syntax.let_rec_in (f, x, e1, e2))
   in
-  one_of [ lambda; let_in; exp1 ] chrs
+  one_of [ if_then_else; lambda; rec_lambda; let_in; let_rec_in; exp2 ] chrs
+
+and exp2 chrs =
+  one_of
+    [
+      binop exp1 "*" exp2 (fun e1 e2 -> Syntax.Times (e1, e2));
+      binop exp1 "+" exp2 (fun e1 e2 -> Syntax.Plus (e1, e2));
+      binop exp1 "-" exp2 (fun e1 e2 -> Syntax.Minus (e1, e2));
+      binop exp1 "=" exp2 (fun e1 e2 -> Syntax.Equal (e1, e2));
+      binop exp1 "<" exp2 (fun e1 e2 -> Syntax.Less (e1, e2));
+      binop exp1 ">" exp2 (fun e1 e2 -> Syntax.Greater (e1, e2));
+      exp1;
+    ]
+    chrs
 
 and exp1 chrs =
   let apply =
@@ -92,9 +121,17 @@ and exp1 chrs =
   one_of [ apply; exp0 ] chrs
 
 and exp0 chrs =
-  one_of [ (ident >>= fun x -> return (Syntax.Var x)); parens exp2 ] chrs
+  one_of
+    [
+      (integer >>= fun n -> return (Syntax.Int n));
+      word "TRUE" >> return (Syntax.Bool true);
+      word "FALSE" >> return (Syntax.Bool false);
+      (ident >>= fun x -> return (Syntax.Var x));
+      parens exp3;
+    ]
+    chrs
 
 let parse str =
-  match str |> String.trim |> explode |> exp2 with
+  match str |> String.trim |> explode |> exp3 with
   | Some (v, []) -> v
   | Some (_, _ :: _) | None -> failwith "Parsing error"

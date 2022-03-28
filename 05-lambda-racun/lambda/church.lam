@@ -46,4 +46,4 @@ IN
 LET normalize =
     FUN n -> n succ zero
 IN
-normalize ((ycombinator psiodfact) (succ (succ six)))
+normalize ((ycombinator psiodfact) (pred (pred six)))

@@ -6,7 +6,7 @@ let read_source filename =
 
 let main () =
   if Array.length Sys.argv <> 2 then
-    failwith ("Run LAMBDA as '" ^ Sys.argv.(0) ^ " <filename>.lam'")
+    failwith ("Run MINIML as '" ^ Sys.argv.(0) ^ " <filename>.mml'")
   else
     let filename = Sys.argv.(1) in
     let source = read_source filename in
