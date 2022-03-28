@@ -14,7 +14,7 @@ let rec subst_exp sbst = function
 let string_of_ident (Ident x) = x
 
 let rec string_of_exp3 = function
-  | Lambda (x, e) -> "FUN " ^ string_of_ident x ^ " -> " ^ string_of_exp3 e
+  | Lambda (x, e) -> "\\" ^ string_of_ident x ^ ". " ^ string_of_exp3 e
   | e -> string_of_exp2 e
 
 and string_of_exp2 = function e -> string_of_exp1 e

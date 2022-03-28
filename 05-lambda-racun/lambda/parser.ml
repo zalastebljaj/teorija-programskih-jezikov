@@ -72,8 +72,8 @@ let ident =
 
 let rec exp2 chrs =
   let lambda =
-    word "FUN" >> spaces1 >> ident >>= fun x ->
-    spaces1 >> word "->" >> spaces1 >> exp2 >>= fun e ->
+    word "\\" >> spaces >> ident >>= fun x ->
+    spaces >> word "." >> spaces >> exp2 >>= fun e ->
     return (Syntax.Lambda (x, e))
   and let_in =
     word "LET" >> spaces1 >> ident >>= fun x ->
