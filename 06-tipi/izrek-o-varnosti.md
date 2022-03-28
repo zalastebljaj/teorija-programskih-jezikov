@@ -9,13 +9,13 @@ Vzemimo λ-račun, kot smo ga spoznali na predavanjih:
     M ::= x
         | true
         | false
-        | if M then M1 else M2
+        | if M then M₁ else M₂
         | ⟨n⟩
-        | M1 + M2
-        | M1 * M2
-        | M1 < M2
+        | M₁ + M₂
+        | M₁ * M₂
+        | M₁ < M₂
         | λx. M
-        | M1 M2
+        | M₁ M₂
 
 ### Operacijska semantika
 
@@ -30,59 +30,59 @@ Operacijsko semantiko podamo z malimi koraki:
 
     M  ↝  M'
     ----------------------------------------------
-    if M then M1 else M2  ↝  if M' then M1 else M2
+    if M then M₁ else M₂  ↝  if M' then M₁ else M₂
 
     ------------------------------
-    if true then M1 else M2  ↝  M1
+    if true then M₁ else M₂  ↝  M₁
 
     -------------------------------
-    if false then M1 else M2  ↝  M2
+    if false then M₁ else M₂  ↝  M₂
 
-    M1  ↝  M1'
+    M₁  ↝  M₁'
     --------------------
-    M1 + M2  ↝  M1' + M2
+    M₁ + M₂  ↝  M₁' + M₂
 
-    M2  ↝  M2'
+    M₂  ↝  M₂'
     --------------------
-    V1 + M2  ↝  V1 + M2'
+    V₁ + M₂  ↝  V₁ + M₂'
 
     ---------------------------
-    ⟨n1⟩ + ⟨n2⟩  ↝  ⟨n1 + n2⟩
+    ⟨n₁⟩ + ⟨n₂⟩  ↝  ⟨n₁ + n₂⟩
 
-    M1  ↝  M1'
+    M₁  ↝  M₁'
     --------------------
-    M1 * M2  ↝  M1' * M2
+    M₁ * M₂  ↝  M₁' * M₂
 
-    M2  ↝  M2'
+    M₂  ↝  M₂'
     --------------------
-    V1 * M2  ↝  V1 * M2'
+    V₁ * M₂  ↝  V₁ * M₂'
 
     ---------------------------
-    ⟨n1⟩ * ⟨n2⟩  ↝  ⟨n1 · n2⟩
+    ⟨n₁⟩ * ⟨n₂⟩  ↝  ⟨n₁ · n₂⟩
 
-    M1  ↝  M1'
+    M₁  ↝  M₁'
     --------------------
-    M1 < M2  ↝  M1' < M2
+    M₁ < M₂  ↝  M₁' < M₂
 
-    M2  ↝  M2'
+    M₂  ↝  M₂'
     --------------------
-    V1 < M2  ↝  V1 < M2'
+    V₁ < M₂  ↝  V₁ < M₂'
 
-    n1 < n2
+    n₁ < n₂
     --------------------
-    ⟨n1⟩ < ⟨n2⟩  ↝  true
+    ⟨n₁⟩ < ⟨n₂⟩  ↝  true
 
-    n1 ≮ n2
+    n₁ ≮ n₂
     ---------------------
-    ⟨n1⟩ < ⟨n2⟩  ↝  false
+    ⟨n₁⟩ < ⟨n₂⟩  ↝  false
 
-    M1  ↝  M1'
+    M₁  ↝  M₁'
     ----------------
-    M1 M2  ↝  M1' M2
+    M₁ M₂  ↝  M₁' M₂
 
-    M2  ↝  M2'
+    M₂  ↝  M₂'
     ----------------
-    V1 M2  ↝  V1 M2'
+    V₁ M₂  ↝  V₁ M₂'
 
     ----------------------
     (λx. M) V  ↝  M[V / x]
@@ -107,42 +107,97 @@ Pravila za določanje tipov pa so:
     ----------------
     Γ ⊢ false : bool
 
-    Γ ⊢ M : bool   Γ ⊢ M1 : A   Γ ⊢ M2 : A
+    Γ ⊢ M : bool   Γ ⊢ M₁ : A   Γ ⊢ M₂ : A
     ---------------------------------------
-    Γ ⊢ if M then M1 else M2 : A
+    Γ ⊢ if M then M₁ else M₂ : A
 
     -------------
     Γ ⊢ ⟨n⟩ : int
 
-    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    Γ ⊢ M₁ : int   Γ ⊢ M₂ : int
     ----------------------------
-    Γ ⊢ M1 + M2 : int
+    Γ ⊢ M₁ + M₂ : int
 
-    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    Γ ⊢ M₁ : int   Γ ⊢ M₂ : int
     ----------------------------
-    Γ ⊢ M1 * M2 : int
+    Γ ⊢ M₁ * M₂ : int
 
-    Γ ⊢ M1 : int   Γ ⊢ M2 : int
+    Γ ⊢ M₁ : int   Γ ⊢ M₂ : int
     ----------------------------
-    Γ ⊢ M1 < M2 : bool
+    Γ ⊢ M₁ < M₂ : bool
 
     Γ, x : A ⊢ M : B
     -----------------
     Γ ⊢ λx. M : A → B
 
-    Γ ⊢ M1 : A → B   Γ ⊢ M2 : A
+    Γ ⊢ M₁ : A → B   Γ ⊢ M₂ : A
     ----------------------------
-    Γ ⊢ M1 M2 : B
+    Γ ⊢ M₁ M₂ : B
 
 ## Izrek o varnosti
 
 ### Lema (o substituciji)
 
-Če velja `Γ ⊢ M : A` in `Γ, x : A ⊢ N : B` in , tedaj velja `Γ ⊢ N[M / x] : B`.
+Če velja `Γ, x : A, Γ' ⊢ M : B` in `Γ, Γ' ⊢ N : A`, tedaj velja `Γ, Γ' ⊢ M[N / x] : B`.
 
 #### Dokaz
 
-Z indukcijo na izpeljavo `Γ, x : A ⊢ N : B`.
+Z indukcijo na izpeljavo `Γ, x : A, Γ' ⊢ M : B`.
+Če je zaključek zadnjega uporabljenega pravila:
+
+* `Γ, x : A, Γ' ⊢ x : A`, je `M = x`, zato velja `M[N / x] = N`,
+    torej velja `Γ, Γ' ⊢ M[N / x] : B` po drugi predpostavki.
+
+* `Γ, x : A, Γ' ⊢ y : B` za `y ≠ x`, iz prvi predpostavke sledi `(y : B) ∈ Γ, Γ'`.
+    Iz tega sledi `Γ, Γ' ⊢ M[N / x] : B`, saj je `M[N / x] = y`.
+
+* `Γ, x : A, Γ' ⊢ true : bool`, velja tudi `Γ, Γ' ⊢ true : bool`
+
+* `Γ, x : A, Γ' ⊢ false : bool`, velja tudi `Γ, Γ' ⊢ false : bool`
+
+* `Γ, x : A, Γ' ⊢ if M then M₁ else M₂ : A`, mora veljati
+    `Γ, x : A, Γ' ⊢ M : bool`, `Γ, x : A, Γ' ⊢ M₁ : A` in `Γ, x : A, Γ' ⊢ M₂ : A`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ' ⊢ M[N / x] : bool`, `Γ, Γ' ⊢ M₁[N / x] : A` in `Γ, Γ' ⊢ M₂[N / x] : A`,
+    iz česar sledi `Γ, Γ' ⊢ (if M then M₁ else M₂)[N / x] : A`, saj je
+    `(if M then M₁ else M₂)[N / x] = if M[N / x] then M₁[N / x] else M₂[N / x]`.
+
+* `Γ, x : A, Γ' ⊢ ⟨n⟩ : int`, velja tudi `Γ, Γ' ⊢ ⟨n⟩ : int`
+
+* `Γ, x : A, Γ' ⊢ M₁ + M₂ : int`, mora veljati
+    `Γ, x : A, Γ' ⊢ M₁ : int` in `Γ, x : A, Γ' ⊢ M₂ : int`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ' ⊢ M₁[N / x] : int` in `Γ, Γ' ⊢ M₂[N / x] : int`
+    iz česar sledi `Γ, Γ' ⊢ (M₁ + M₂)[N / x] : int`, saj je
+    `(M₁ + M₂)[N / x] = M₁[N / x] + M₂[N / x]`.
+
+* `Γ, x : A, Γ' ⊢ M₁ * M₂ : int`, mora veljati
+    `Γ, x : A, Γ' ⊢ M₁ : int` in `Γ, x : A, Γ' ⊢ M₂ : int`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ' ⊢ M₁[N / x] : int` in `Γ, Γ' ⊢ M₂[N / x] : int`
+    iz česar sledi `Γ, Γ' ⊢ (M₁ * M₂)[N / x] : int`, saj je
+    `(M₁ * M₂)[N / x] = M₁[N / x] * M₂[N / x]`.
+
+* `Γ, x : A, Γ' ⊢ M₁ < M₂ : int`, mora veljati
+    `Γ, x : A, Γ' ⊢ M₁ : int` in `Γ, x : A, Γ' ⊢ M₂ : int`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ' ⊢ M₁[N / x] : int` in `Γ, Γ' ⊢ M₂[N / x] : int`
+    iz česar sledi `Γ, Γ' ⊢ (M₁ < M₂)[N / x] : int`, saj je
+    `(M₁ < M₂)[N / x] = M₁[N / x] < M₂[N / x]`.
+
+* `Γ, x : A, Γ' ⊢ λy. M' : A' → B'`, mora veljati
+    `Γ, x : A, Γ', y : A' ⊢ M' : B'`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ', y : A' ⊢ M'[N / x] : B'`
+    iz česar sledi `Γ, Γ' ⊢ (λy. M')[N / x] : A' → B'`, saj je
+    `(λy. M')[N / x] = λy. M'[N / x]`.
+
+* `Γ, x : A, Γ' ⊢ M₁ M₂ : B`, mora veljati
+    `Γ, x : A, Γ' ⊢ M₁ : A' → B` in `Γ, x : A, Γ' ⊢ M₂ : A'`.
+    Po indukcijski predpostavki zato velja
+    `Γ, Γ' ⊢ M₁[N / x] : A' → B` in `Γ, Γ' ⊢ M₂[N / x] : A'`
+    iz česar sledi `Γ, Γ' ⊢ (M₁ M₂)[N / x] : int`, saj je
+    `(M₁ M₂)[N / x] = M₁[N / x] M₂[N / x]`.
 
 ### Trditev (napredek)
 
@@ -161,39 +216,39 @@ Z indukcijo na predpostavko o določenem tipu.
 
 * `⊢ false : bool`, imamo vrednost (1).
 
-* `⊢ if M then M1 else M2 : A`, mora veljati `⊢ M : bool`.
+* `⊢ if M then M₁ else M₂ : A`, mora veljati `⊢ M : bool`.
     Po indukciji dobimo dva primera:
     1. `M` je vrednost, torej `true`, `false`, `⟨n⟩` ali `λx. M`.
     Ker velja `⊢ M : bool`, zadnji dve možnosti odpadeta.
-    Če je `M = true`, velja `if M then M1 else M2 ↝ M1`,
-    če je `M = false`, velja `if M then M1 else M2 ↝ M2`.
-    2. Obstaja `M'`, da velja `M ↝ M'`, zato velja tudi `if M then M1 else M2 ↝ if M' then M1 else M2`.
+    Če je `M = true`, velja `if M then M₁ else M₂ ↝ M₁`,
+    če je `M = false`, velja `if M then M₁ else M₂ ↝ M₂`.
+    2. Obstaja `M'`, da velja `M ↝ M'`, zato velja tudi `if M then M₁ else M₂ ↝ if M' then M₁ else M₂`.
 
     V vseh primerih izraz torej lahko naredi korak (2).
 
 * `⊢ ⟨n⟩ : int`, imamo vrednost (1).
 
-* `⊢ M1 + M2 : int`, mora veljati `⊢ M1 : int` in `⊢ M2 : int`.
-    Po indukciji za `M1` dobimo dva primera:
-    1. `M1` je vrednost tipa `int`, torej število `⟨n1⟩`. V tem primeru po indukciji za `M2` dobimo dva primera:
-        1. Tudi `M2` je vrednost tipa `int`, torej število `⟨n2⟩`. Tedaj velja `M1 + M2 = ⟨n1⟩ + ⟨n2⟩ ↝ ⟨n1 + n2⟩`.
-        2. Obstaja `M2'`, da velja `M2 ↝ M2'`, zato velja tudi `M1 M2 = V1 M2 ↝ V1 M2'`.
-    2. Obstaja `M1'`, da velja `M1 ↝ M1'`, zato velja tudi `M1 M2 ↝ M1' M2`.
+* `⊢ M₁ + M₂ : int`, mora veljati `⊢ M₁ : int` in `⊢ M₂ : int`.
+    Po indukciji za `M₁` dobimo dva primera:
+    1. `M₁` je vrednost tipa `int`, torej število `⟨n₁⟩`. V tem primeru po indukciji za `M₂` dobimo dva primera:
+        1. Tudi `M₂` je vrednost tipa `int`, torej število `⟨n₂⟩`. Tedaj velja `M₁ + M₂ = ⟨n₁⟩ + ⟨n₂⟩ ↝ ⟨n₁ + n₂⟩`.
+        2. Obstaja `M₂'`, da velja `M₂ ↝ M₂'`, zato velja tudi `M₁ M₂ = V₁ M₂ ↝ V₁ M₂'`.
+    2. Obstaja `M₁'`, da velja `M₁ ↝ M₁'`, zato velja tudi `M₁ M₂ ↝ M₁' M₂`.
 
     V vseh primerih izraz torej lahko naredi korak (2).
 
-* `⊢ M1 * M2 : int`, je dokaz podoben kot za vsoto.
+* `⊢ M₁ * M₂ : int`, je dokaz podoben kot za vsoto.
 
-* `⊢ M1 < M2 : bool`, je dokaz podoben kot za vsoto.
+* `⊢ M₁ < M₂ : bool`, je dokaz podoben kot za vsoto.
 
 * `⊢ λx. M : A → B`, imamo vrednost (1).
 
-* `⊢ M1 M2 : B`, mora veljati `⊢ M1 : A → B` in `⊢ M2 : A` za nek `A`.
-    Po indukciji za `M1` dobimo dva primera:
-    1. `M1` je vrednost `V1`. V tem primeru po indukciji za `M2` dobimo dva primera:
-        1. Tudi `M2` je vrednost `V2`. Ker velja `⊢ M1 : A → B`, mora veljati `M1 = λx. M` za neka `x` in `M`. Tedaj velja `M1 M2 = (λx. M) V2 ↝ M[V2 / x]`.
-        2. Obstaja `M2'`, da velja `M2 ↝ M2'`, zato velja tudi `M1 M2 = V1 M2 ↝ V1 M2'`.
-    2. Obstaja `M1'`, da velja `M1 ↝ M1'`, zato velja tudi `M1 M2 ↝ M1' M2`.
+* `⊢ M₁ M₂ : B`, mora veljati `⊢ M₁ : A → B` in `⊢ M₂ : A` za nek `A`.
+    Po indukciji za `M₁` dobimo dva primera:
+    1. `M₁` je vrednost `V₁`. V tem primeru po indukciji za `M₂` dobimo dva primera:
+        1. Tudi `M₂` je vrednost `V₂`. Ker velja `⊢ M₁ : A → B`, mora veljati `M₁ = λx. M` za neka `x` in `M`. Tedaj velja `M₁ M₂ = (λx. M) V₂ ↝ M[V₂ / x]`.
+        2. Obstaja `M₂'`, da velja `M₂ ↝ M₂'`, zato velja tudi `M₁ M₂ = V₁ M₂ ↝ V₁ M₂'`.
+    2. Obstaja `M₁'`, da velja `M₁ ↝ M₁'`, zato velja tudi `M₁ M₂ ↝ M₁' M₂`.
 
     V vseh primerih izraz torej lahko naredi korak (2).
 
@@ -206,45 +261,45 @@ Z indukcijo na predpostavko o določenem tipu.
 Z indukcijo na predpostavko o koraku.
 Če je zaključek zadnjega uporabljenega pravila:
 
-* `if M then M1 else M2 ↝ if M' then M1 else M2`, mora veljati `M ↝ M'`,
-  iz `Γ ⊢ if M then M1 else M2 : A` pa sledi
-  `Γ ⊢ M : bool`, `Γ ⊢ M1 : A` in `Γ ⊢ M2 : A`.
+* `if M then M₁ else M₂ ↝ if M' then M₁ else M₂`, mora veljati `M ↝ M'`,
+  iz `Γ ⊢ if M then M₁ else M₂ : A` pa sledi
+  `Γ ⊢ M : bool`, `Γ ⊢ M₁ : A` in `Γ ⊢ M₂ : A`.
   Po indukcijski predpostavki velja `Γ ⊢ M' : bool`, iz česar sledi tudi
-  `Γ ⊢ if M' then M1 else M2 : A`.
+  `Γ ⊢ if M' then M₁ else M₂ : A`.
 
-* `if true then M1 else M2 ↝ M1`,
-  iz `Γ ⊢ if M then M1 else M2 : A` sledi `Γ ⊢ M1 : A`, kar želimo.
+* `if true then M₁ else M₂ ↝ M₁`,
+  iz `Γ ⊢ if M then M₁ else M₂ : A` sledi `Γ ⊢ M₁ : A`, kar želimo.
 
-* `if false then M1 else M2 ↝ M2`
-  iz `Γ ⊢ if M then M1 else M2 : A` sledi `Γ ⊢ M2 : A`, kar želimo.
+* `if false then M₁ else M₂ ↝ M₂`
+  iz `Γ ⊢ if M then M₁ else M₂ : A` sledi `Γ ⊢ M₂ : A`, kar želimo.
 
-* `M1 + M2 ↝ M1' + M2`, mora veljati `M1 ↝ M1'`,
-  iz `Γ ⊢ M1 + M2 : int` pa sledi
-  `Γ ⊢ M1 : int` in `Γ ⊢ M2 : int`.
-  Po indukcijski predpostavki velja `Γ ⊢ M1' : int`, iz česar sledi tudi
-  `Γ ⊢ M1' M2 : int`.
+* `M₁ + M₂ ↝ M₁' + M₂`, mora veljati `M₁ ↝ M₁'`,
+  iz `Γ ⊢ M₁ + M₂ : int` pa sledi
+  `Γ ⊢ M₁ : int` in `Γ ⊢ M₂ : int`.
+  Po indukcijski predpostavki velja `Γ ⊢ M₁' : int`, iz česar sledi tudi
+  `Γ ⊢ M₁' M₂ : int`.
 
-* `V1 + M2 ↝ V1 + M2'`, mora veljati `M2 ↝ M2'`,
-  iz `Γ ⊢ V1 + M2 : int` pa sledi
-  `Γ ⊢ V1 : int` in `Γ ⊢ M2 : int`.
-  Po indukcijski predpostavki velja `Γ ⊢ M2' : int`, iz česar sledi tudi
-  `Γ ⊢ M1 + M2' : int`.
+* `V₁ + M₂ ↝ V₁ + M₂'`, mora veljati `M₂ ↝ M₂'`,
+  iz `Γ ⊢ V₁ + M₂ : int` pa sledi
+  `Γ ⊢ V₁ : int` in `Γ ⊢ M₂ : int`.
+  Po indukcijski predpostavki velja `Γ ⊢ M₂' : int`, iz česar sledi tudi
+  `Γ ⊢ M₁ + M₂' : int`.
 
-* `⟨n1⟩ + ⟨n2⟩ ↝ ⟨n1 + n2⟩`, kjer sta obe strani tipa `int`.
+* `⟨n₁⟩ + ⟨n₂⟩ ↝ ⟨n₁ + n₂⟩`, kjer sta obe strani tipa `int`.
 
 * Dokazi ohranitve za produkt in primerjavo števil so enaki kot pri vsoti.
 
-* `M1 M2 ↝ M1' M2`, mora veljati `M1 ↝ M1'`,
-  iz `Γ ⊢ M1 M2 : A` pa sledi
-  `Γ ⊢ M1 : B → A` in `Γ ⊢ M2 : B` za nek `B`.
-  Po indukcijski predpostavki velja `Γ ⊢ M1' : B → A`, iz česar sledi tudi
-  `Γ ⊢ M1' M2 : A`.
+* `M₁ M₂ ↝ M₁' M₂`, mora veljati `M₁ ↝ M₁'`,
+  iz `Γ ⊢ M₁ M₂ : A` pa sledi
+  `Γ ⊢ M₁ : B → A` in `Γ ⊢ M₂ : B` za nek `B`.
+  Po indukcijski predpostavki velja `Γ ⊢ M₁' : B → A`, iz česar sledi tudi
+  `Γ ⊢ M₁' M₂ : A`.
 
-* `V1 M2 ↝ V1 M2'`, mora veljati `M2 ↝ M2'`,
-  iz `Γ ⊢ V1 M2 : A` pa sledi
-  `Γ ⊢ V1 : B → A` in `Γ ⊢ M2 : B` za nek `B`.
-  Po indukcijski predpostavki velja `Γ ⊢ M2' : B`, iz česar sledi tudi
-  `Γ ⊢ V M2' : A`.
+* `V₁ M₂ ↝ V₁ M₂'`, mora veljati `M₂ ↝ M₂'`,
+  iz `Γ ⊢ V₁ M₂ : A` pa sledi
+  `Γ ⊢ V₁ : B → A` in `Γ ⊢ M₂ : B` za nek `B`.
+  Po indukcijski predpostavki velja `Γ ⊢ M₂' : B`, iz česar sledi tudi
+  `Γ ⊢ V M₂' : A`.
 
 * `(λx. M) V ↝ M[V / x]`,
   iz `Γ ⊢ (λx. M) V : A` sledi
