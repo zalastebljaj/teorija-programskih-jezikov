@@ -13,15 +13,20 @@ let rec occurs p = function
   | ArrowTy (ty1, ty2) -> occurs p ty1 || occurs p ty2
   | ParamTy p' -> p = p'
 
+let rec subst_ty sbst = function
+  | (IntTy | BoolTy) as ty -> ty
+  | ArrowTy (ty1, ty2) -> ArrowTy (subst_ty sbst ty1, subst_ty sbst ty2)
+  | ParamTy p as ty -> List.assoc_opt p sbst |> Option.value ~default:ty
+
 let fresh_ty () = ParamTy (fresh_param ())
-let string_of_param (Param p) = string_of_int p
+let string_of_param (Param p) = "'a" ^ string_of_int p
 
 let rec string_of_ty = function
   | IntTy -> "int"
   | BoolTy -> "bool"
   | ArrowTy (ty1, ty2) ->
       "(" ^ string_of_ty ty1 ^ " -> " ^ string_of_ty ty2 ^ ")"
-  | ParamTy p -> "'a" ^ string_of_param p
+  | ParamTy p -> string_of_param p
 
 type ident = Ident of string
 

@@ -34,8 +34,24 @@ let rec infer_exp ctx = function
       let alpha = fresh_ty () in
       (alpha, ((ty1, ArrowTy (ty2, alpha)) :: eqs1) @ eqs2)
 
+let subst_eqs sbst eqs =
+  List.map (fun (ty1, ty2) -> (subst_ty sbst ty1, subst_ty sbst ty2)) eqs
+
+let compose_subst sbst1 sbst2 =
+  sbst1 @ List.map (fun (p, ty) -> (p, subst_ty sbst1 ty)) sbst2
+
 let rec unify = function
-    | [] -> []
-    | (ty1, ty2) :: eqs when ty1 = ty2 -> unify eqs
-    | (ArrowTy (ty1, ty2), ArrowTy (ty1', ty2')) :: eqs
-       -> unify ((ty1, ty1') :: (ty2, ty2') :: eqs)
+  | [] -> []
+  | (ty1, ty2) :: eqs when ty1 = ty2 -> unify eqs
+  | (ArrowTy (ty1, ty2), ArrowTy (ty1', ty2')) :: eqs ->
+      unify ((ty1, ty1') :: (ty2, ty2') :: eqs)
+  | (ParamTy p, ty) :: eqs when not (occurs p ty) ->
+      let subst = unify (subst_eqs [ (p, ty) ] eqs) in
+      compose_subst [ (p, ty) ] subst
+  | (ty, ParamTy p) :: eqs when not (occurs p ty) ->
+      let subst = unify (subst_eqs [ (p, ty) ] eqs) in
+      compose_subst [ (p, ty) ] subst
+  | (ty1, ty2) :: _ ->
+      failwith
+        ("Cannot unify types " ^ string_of_ty ty1 ^ " and " ^ string_of_ty ty2
+       ^ ".")
