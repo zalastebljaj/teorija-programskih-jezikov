@@ -2,7 +2,7 @@
 
 Naloga obsega dve razširitvi jezika miniml, ki ste ga spoznali med predavanji.
 
-Cilj domače naloge so izključno razširitve jezike, zato pri karkšnihkoli problemih z izgradnjo jezika pošljite e-mail, da problem čimprej rešimo.
+Cilj domače naloge so izključno razširitve jezika, zato pri karkšnihkoli problemih z izgradnjo jezika pošljite e-mail, da problem čimprej rešimo.
 
 ### Izgradnja
 Za izgradnjo jezika v konzoli pojdite do mape `domaca-naloga-02/miniml` in v njej poženite `dune build`.
@@ -27,7 +27,7 @@ Vaša naloga je:
 3. V datoteko `map.mml` napišite funkcijo `map` in jo uporabite na primeru.
 4. V datoteko `split.mml` napišite funkicjo `split` in jo uporabite na primeru.
 
-(opis funkcij `map` in `split` lahko poiščete v Ocaml Documentaciji https://caml.inria.fr/pub/docs/manual-ocaml/libref/List.html) 
+(opis funkcij `map` in `split` lahko poiščete v Ocaml Documentaciji https://caml.inria.fr/pub/docs/manual-ocaml/libref/List.html)
 
 ## RAZŠIRITEV Z LENIM IZVAJANJEM
 
